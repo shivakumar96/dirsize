@@ -41,7 +41,8 @@ func calculateTotalSize(dir *display.DirSizeResult) int64 {
 // The reads a directory and its content and find the directory size by adding file size
 func ReadDirectory(directoryPath string) (*display.DirSizeResult, error) {
 
-	var root = directoryPath
+	// get the clean path of the directoryPath, eg: this avoids ./../ etc and simplifies it.
+	var root = filepath.Clean(directoryPath)
 
 	// stores the refernces
 	diMap := make(map[string]*display.DirSizeResult)
@@ -63,20 +64,7 @@ func ReadDirectory(directoryPath string) (*display.DirSizeResult, error) {
 		if fInfo.IsDir() {
 			//create new refernce to DirSizeResult
 			curr := display.NewDirSizeResult(path, 0)
-
-			// valides conditions if root is ./ ../ "././../." and updates the root accordingly
-			if fInfo.Name() == "." || fInfo.Name() == ".." {
-				if parentPath == ".." && fInfo.Name() == "." {
-					diMap[parentPath] = curr
-					root = parentPath
-				} else {
-					diMap[fInfo.Name()] = curr
-					root = fInfo.Name()
-				}
-
-			} else {
-				diMap[path] = curr
-			}
+			diMap[path] = curr
 			// If parent is present append current reference to parent sub directory
 			if found {
 				prev.AppendSubDirResult(curr)

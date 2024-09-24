@@ -24,6 +24,16 @@ func printHelp() {
 	--human      Prints size in human-readable format
 	--recursive  Prints size of subdirectories recursively
 	--help       Help command
+
+	eg: dirsize --human --recursive dir1 dir2
+
+	Output: 
+	size  cszie  directory name
+	-------------------------------
+	
+	size           - the size of the file
+	cszie          - cummulative size 
+	directory name - the name of the directory
 	`
 	fmt.Println(help)
 }
