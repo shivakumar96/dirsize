@@ -1,15 +1,53 @@
 package main
 
+/**
+Author : Shivakumar Suresh
+**/
+
 import (
+	"flag"
 	"fmt"
 
-	"dirsize.io/dirszie/display"
+	"dirsize.io/dirsize/display"
+	dirread "dirsize.io/dirsize/read"
 )
 
-// Enrty point for the command line utility
-// parses the input and invoke the functions
+func printHelp() {
+	var help = `
+	Name:
+	dirsize - calculates the directory size and prints it
+	   
+	Usage:
+	dirsize [Options] <dirirectory list>
+	   
+	Options:
+	--human      Prints size in human-readable format
+	--recursive  Prints size of subdirectories recursively
+	--help       Help command
+	`
+	fmt.Println(help)
+}
+
+// Entry point for the command line utility, parses the input and invokes the functions
 func main() {
-	s, h := display.ParseBytesToHumanReadable(42949672960)
-	fmt.Printf("%*.*f %v\n", 5, 2, s, h)
-	fmt.Printf("%v ", display.ParseHumanReadableToBytes(s, h))
+	isHumanReadable := flag.Bool("human", false, "Prints size in human readable format")
+	isRecurssive := flag.Bool("recursive", false, "Prints size of subdirectories recursively")
+
+	flag.Parse()
+	directories := flag.Args()
+
+	if len(directories) == 0 {
+		printHelp()
+		return
+	}
+
+	dirres := dirread.ReadAllDirectory(directories)
+	if len(dirres) == 0 {
+		return
+	}
+
+	display.UpdateDecimalWidth(dirres, *isHumanReadable)
+	display.PrintHeader(*isHumanReadable)
+	display.PrintFormattedDirSizeResult(dirres, 0, *isHumanReadable, *isRecurssive)
+
 }

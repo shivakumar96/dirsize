@@ -1,18 +1,19 @@
 package display
 
-func ParseBytesToHumanReadable(size float32) (float32, string) {
+func ParseBytesToHumanReadable(size int64) (float32, string) {
 	suffix := []string{"B", "K", "M", "G", "T", "P"}
 	suffixIndx := 0
-	currSize := size
+	currSize := float32(size)
 
-	for int64(currSize) >= 1024 {
-		currSize = float32(int(currSize) >> 10) // divide by 1024, while retainging the value after decimal point
+	for int(currSize) >= 1024 {
+		currSize /= float32(1024)
 		suffixIndx++
 	}
 	return currSize, suffix[suffixIndx]
 
 }
 
+// added for future use
 func ParseHumanReadableToBytes(size float32, humanRedableVal string) int64 {
 	var mulval int64 = 1
 
