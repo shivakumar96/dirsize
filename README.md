@@ -24,7 +24,7 @@ Note: This executable was buit on the following architecture
 --recursive  Prints size of subdirectories recursively
 --help       Help command
 
-eg: dirsize --huma --recursive dir1 dir2
+eg: dirsize --human --recursive dir1 dir2
 ```
 
 ## Output
